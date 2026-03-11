@@ -20,6 +20,9 @@ connectDb();
 
 app.use("/api", authRoutes);
 app.use("/api", userRouter);
+app.get("/",(req,res)=>{
+  res.send("Welcome to the authentication API");
+})
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

@@ -1,14 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { getUserProfile } from "../apis/FetchUserProfile";
+import { useQuery } from "@tanstack/react-query";
 
 const Profile = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
+
   const navigate = useNavigate();
+  const { data, isPending, error } = useQuery({
+    queryKey: ["profile"],
+    queryFn: getUserProfile,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+  });
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
     navigate("/login");
   };
   return (
@@ -61,7 +66,7 @@ const Profile = () => {
                   Name
                 </h3>
                 <p className="text-slate-300 text-lg mt-1 font-medium group-hover/profile-item:text-emerald-100">
-                  {user?.name || "N/A"}
+                  {data?.name || "N/A"}
                 </p>
               </div>
             </div>
@@ -89,7 +94,7 @@ const Profile = () => {
                   Email
                 </h3>
                 <p className="text-slate-300 text-lg mt-1 font-medium group-hover/profile-item:text-blue-100 break-all">
-                  {user?.email || "N/A"}
+                  {data?.email || "N/A"}
                 </p>
               </div>
             </div>
@@ -98,7 +103,10 @@ const Profile = () => {
 
         {/* Logout Button */}
         <div className="pt-8 border-t border-white/10">
-          <button onClick={handleLogout} className="w-full cursor-pointer bg-gradient-to-r from-red-500 to-rose-600 text-white font-semibold py-4 px-8 rounded-2xl hover:from-red-600 hover:to-rose-700 focus:ring-4 focus:ring-red-500/50 transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-2xl group/btn">
+          <button
+            onClick={handleLogout}
+            className="w-full cursor-pointer bg-gradient-to-r from-red-500 to-rose-600 text-white font-semibold py-4 px-8 rounded-2xl hover:from-red-600 hover:to-rose-700 focus:ring-4 focus:ring-red-500/50 transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-2xl group/btn"
+          >
             <span className="flex items-center justify-center group-hover/btn:translate-x-1 transition-transform duration-300">
               <svg
                 className="w-5 h-5 mr-2 -translate-x-1 group-hover/btn:translate-x-0 transition-transform duration-300"
@@ -122,9 +130,10 @@ const Profile = () => {
         <div className=" flex justify-center items-center gap-4 mt-8 pt-8 border-t border-white/10">
           <div className="text-center px-10 py-4 cursor-pointer bg-white/5 rounded-xl hover:bg-white/10 transition-all">
             <div className="text-2xl font-bold text-emerald-400">✓</div>
-            <p className="text-slate-300 text-sm mt-1">{user?.isVerified ? "Email Verified" : "Verify your Email"}</p>
+            <p className="text-slate-300 text-sm mt-1">
+              {data?.isVerified ? "Email Verified" : "Verify your Email"}
+            </p>
           </div>
-          
         </div>
       </div>
     </div>

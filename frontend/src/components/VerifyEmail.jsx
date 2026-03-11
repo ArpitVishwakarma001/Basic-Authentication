@@ -39,7 +39,7 @@ const VerifyEmail = () => {
       console.log(message, success);
       if (success) {
         navigate("/profile");
-        localStorage.setItem("user", JSON.stringify(user));
+        // localStorage.setItem("user", JSON.stringify(user));
         alert("Email verified successfully!");
       } else {
         setError({ message });

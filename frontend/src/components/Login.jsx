@@ -38,14 +38,12 @@ const Login = () => {
           withCredentials: true,
         },
       );
-      console.log(response);
 
       const { token, success, user } = response.data;
 
       if (success) {
         // Store token and redirect
         localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
 
         navigate("/profile");
       } else {
